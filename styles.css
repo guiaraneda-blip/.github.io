@@ -24,3 +24,5 @@ nav a:hover, nav a.active { color: #00ff41; }
 .prompt span { color: #00ff41; font-size: 13px; }
 .cursor { display: inline-block; width: 8px; height: 14px; background: #00ff41; vertical-align: middle; animation: blink 1s step-end infinite; }
 @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+section { margin-bottom: 40px; }
+.about-text p { color: #00cc35; font-size: 14px; line-height: 1.8; margin-bottom: 12px; }
